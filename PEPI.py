@@ -190,59 +190,6 @@ def make_3dscatter(id, voxels, time, xlim, ylim, zlim, min_val, cbar_range, dirp
     plt.close()
 
 
-
-def make_volume(id, voxels, time, xlim, ylim, zlim, min_val, cbar_range, dirpath, filename, logscale=True):
-    """Renders the 3D volume of the voxel data using PyVista."""
-  
-    # clip voxels between min val and 1
-    voxels = np.clip(voxels, min_val, 1)
-
-    # Calculate aspect ratios based on voxel dimensions
-    aspect_x = voxels.shape[0] / max(voxels.shape)
-    aspect_y = voxels.shape[1] / max(voxels.shape)
-    aspect_z = voxels.shape[2] / max(voxels.shape)
-
-    # Plot the x-y heatmap
-    fig1 = plt.figure(1, clear=True)
-    ax = fig1.add_subplot(111, projection='3d')
-
-    # Define colors based on voxel_data values
-    if logscale:
-        norm = LogNorm(vmin=cbar_range[0], vmax=cbar_range[1])
-    else:
-        norm = Normalize(vmin=cbar_range[0], vmax=cbar_range[1])
-    
-    norm_values = norm(voxels.flatten())
-    colors = plt.get_cmap('turbo')(norm(voxels.flatten()))
-    colors = colors.reshape(*voxels.shape, -1)
-    colors[..., 3] = norm_values.reshape(voxels.shape)
-    filled = np.ones(voxels.shape, dtype=bool)
-    filled[voxels <= min_val] = False
-
-    # transpose filled and colours to match pept coordinates.
-    filled = np.transpose(filled, (0, 2, 1))
-    colors = np.transpose(colors, (0, 2, 1, 3))
-
-    # Create voxel plot
-    ax.voxels(filled, facecolors=colors, edgecolor='none')
-    ax.grid(False)
-    ax.set_xlabel('X Position (mm)', fontsize=12)
-    ax.set_ylabel('Z Position (mm)', fontsize=12)
-    ax.set_zlabel('Y Position (mm)', fontsize=12)
-    ax.set_box_aspect([aspect_x, aspect_z, aspect_y])
-    ax.set_title('Time (s): ' + str(round(time, 2)), fontsize=16)
-
-    cmap = plt.cm.ScalarMappable(cmap='turbo', norm=norm)
-    cmap.set_array([])
-    cax = fig1.add_axes([ax.get_position().x1+0.01, ax.get_position().y0, 0.02, ax.get_position().height])
-    cbar = fig1.colorbar(cmap, cax=cax)
-
-    cbar.set_label('Normalised concentration (-)', fontsize=14)
-    plt.savefig(f'{dirpath}{os.sep}{filename}_{id:04d}.png', dpi=300, bbox_inches='tight')
-    plt.close()
-
-
-
 def make_heatmap(id, norm_pixels, time, xlim, ylim, min_val, cbar_range, dirpath, filename, logscale = True):
     """Plots the heatmap of the pixelised data."""
     filter_pixels = norm_pixels.T
@@ -291,7 +238,7 @@ def make_heatmap(id, norm_pixels, time, xlim, ylim, min_val, cbar_range, dirpath
 
 def make_xPDE(id, time, x, x_density, dirpath, filename):
     """Plots the KDE (Probability Density Estimation) for the x-dimension of the data."""
-    fig2 = plt.figure(2, clear=True)
+    plt.figure(2, clear=True)
     plt.plot(x, x_density, color='blue', lw=2)
     plt.xlim(x[0], x[-1])
     plt.ylim(0, 10 / len(x))  # Adding a small margin above the max value for aesthetics
@@ -305,7 +252,7 @@ def make_xPDE(id, time, x, x_density, dirpath, filename):
 
 def make_yPDE(id, time, y, y_density, dirpath, filename):
     """Plots the KDE (Probability Density Estimation) for the y-dimension of the data."""
-    fig3 = plt.figure(3, clear=True)
+    plt.figure(3, clear=True)
     plt.plot(y, y_density, color='blue', lw=2)
     plt.xlim(y[0], y[-1])
     plt.ylim(0, 10 / len(y))  # Adding a small margin above the max value for aesthetics
@@ -319,7 +266,7 @@ def make_yPDE(id, time, y, y_density, dirpath, filename):
 
 def make_xhistogram(id, time, x_positions, x_frequencies, x_bar_width, dirpath, filename):
     """Plots the x histogram of the pixelised data."""
-    fig4 = plt.figure(4, clear=True)
+    plt.figure(4, clear=True)
     plt.bar(
         x_positions,
         x_frequencies,
@@ -338,7 +285,7 @@ def make_xhistogram(id, time, x_positions, x_frequencies, x_bar_width, dirpath, 
 
 def make_yhistogram(id, time, y_positions, y_frequencies, y_bar_width, dirpath, filename):
     """Plots the y histogram of the pixelised data."""
-    fig5 = plt.figure(5, clear=True)
+    plt.figure(5, clear=True)
     plt.bar(
         y_positions,
         y_frequencies,
@@ -394,7 +341,7 @@ def make_figs(args):
     
     # Make the plots
     if voxels is not None:
-        #make_volume(id, voxels, time, xlim, ylim, zlim, min_val, cbar_range, volmap_dir, filename, logscale=False)
+        
         make_3dscatter(id, voxels, time, xlim, ylim, zlim, min_val, cbar_range, volmap_dir, filename, logscale=True)
     make_heatmap(id, pixels, time, xlim, ylim, min_val, cbar_range, heatmap_dir, filename, logscale=True)
     make_xPDE(id, time, x_grid, x_density, xpde_dir, filename)
@@ -645,14 +592,10 @@ else:
     p = int(sys.argv[1])
 
 
-# Paths
-# DIRPATH = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/cmc-water-50rpm/0.75pc/01"
-# PEPI_FILE_PATH = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/data/cmc-water-50rpm/0.75pc.da14"#.dat"
+# Global parameters
 DIRPATH = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/evolved_geom/01"
 PEPI_FILE_PATH = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/data/evolved_geom/EvolvedPEPI.da01"
-TIMEOUT_DURATION = 900 # seconds per worker
 
-# Global parameters
 TIME_SKIP = 280 # Seconds to skip if there is initial noise
 TIME_LENGTH = 600 # Seconds to read
 TIME_SLICE = 1  # Seconds per slice
@@ -664,6 +607,7 @@ MIN_VAL = 1e-4 # Minimum normalised value allowable
 COLORBAR_RANGE = [1e-4, 1] # Range of the colorbar
 XMIN, XMAX, YMIN, YMAX = [200, 440, 200, 380] #[180, 410, 200, 380] #[112, 491, 47, 556] # X is length, Y is height, Z is depth
 PIXEL_SIZE = (2, 2, 2) # x, y, z size of each pixel in mm
+TIMEOUT_DURATION = 900 # seconds per worker
 
 
 
