@@ -4,7 +4,7 @@
 # create samples
 # parallelize the pepi_algorithm
 # parallelize the results post_processing
-import PEPI
+import pepi.PEPI as PEPI
 save_path = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/evolved_geom/01"
 data_path = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/data/evolved_geom/EvolvedPEPI.da01"
 params = utils.create_parameters(

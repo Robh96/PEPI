@@ -1,6 +1,6 @@
 
 
-from . import utils
+from .. import utils
 import pept
 from scipy.ndimage import zoom
 import numpy as np
