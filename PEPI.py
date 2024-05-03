@@ -598,15 +598,25 @@ PEPI_FILE_PATH = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/d
 
 TIME_SKIP = 280 # Seconds to skip if there is initial noise
 TIME_LENGTH = 600 # Seconds to read
+
 TIME_SLICE = 1  # Seconds per slice
 OVERLAP = 0.5 # The fraction overlap between the time slices
-MEDIAN_WINDOW = 5 # Moving window length (frames) for median filter
-
-ISOTOPE_HALF_LIFE = 109.8 # In minutes
-MIN_VAL = 1e-4 # Minimum normalised value allowable
-COLORBAR_RANGE = [1e-4, 1] # Range of the colorbar
 XMIN, XMAX, YMIN, YMAX = [200, 440, 200, 380] #[180, 410, 200, 380] #[112, 491, 47, 556] # X is length, Y is height, Z is depth
 PIXEL_SIZE = (2, 2, 2) # x, y, z size of each pixel in mm
+
+
+
+
+MEDIAN_WINDOW = 5 # Moving window length (frames) for median filter
+
+
+
+ISOTOPE_HALF_LIFE = 109.8 # In minutes
+
+MIN_VAL = 1e-4 # Minimum normalised value allowable
+COLORBAR_RANGE = [1e-4, 1] # Range of the colorbar
+
+
 TIMEOUT_DURATION = 900 # seconds per worker
 
 
