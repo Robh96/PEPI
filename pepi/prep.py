@@ -1,6 +1,6 @@
 
 
-from .. import utils
+from pepi import utils
 import pept
 from scipy.ndimage import zoom
 import numpy as np
@@ -55,16 +55,26 @@ def egeom(xlim, ylim, zlim, resolution):
     return upscale_grid(eg, resolution, order=1)
 
 
-def load_data(path):
-    """Loads the data from the path."""
-    data = np.loadtxt(path)
-    return data
-
-def samples(data, params=None):
+def samples(data_path, params=None):
     if params is None:
         params = utils.create_parameters() 
     
-    raw_line_data = pept.scanners.adac_forte(data).lines
+    raw_line_data = pept.scanners.adac_forte(data_path).lines
 
-    crop_lines = line_index(data, 0, 10)
+    cropped_lines = line_index(
+        raw_line_data,
+        params.time_skip,
+        params.time_length
+        )
+    
+    lines = pept.LineData(cropped_lines)
+    lines.sample_size = pept.TimeWindow(params.time_slice * 1000)
+    lines.overlap = pept.TimeWindow(params.overlap * params.time_slice * 1000)
 
+    run_time = round((lines.lines[-1, 0] - lines.lines[0, 0]) / 1000) # data runtime
+    
+    # Linelength is the total slices of the data
+    linelen = int(run_time // (params.time_slice * (1 - params.overlap)))
+
+    return lines, linelen, run_time
+  

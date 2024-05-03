@@ -4,10 +4,12 @@
 # create samples
 # parallelize the pepi_algorithm
 # parallelize the results post_processing
-import pepi.PEPI as PEPI
+import pepi
+
 save_path = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/evolved_geom/01"
 data_path = r"/rds/projects/i/ingrama-unilever-soap-cfd/PEPTpipeline/PEPI/data/evolved_geom/EvolvedPEPI.da01"
-params = utils.create_parameters(
+
+params = pepi.utils.create_parameters(
     time_skip=0,
     time_length=1e6,
     time_slice=1,
@@ -18,4 +20,8 @@ params = utils.create_parameters(
     moving_average=True,
     moving_average_window=5,
     half_life=109.8,
-    save_path=save_path)
+    save_path=save_path
+    )
+
+pepi.prep.samples(data_path, params=params)
+
