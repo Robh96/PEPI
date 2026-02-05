@@ -1,6 +1,6 @@
-# PEPI: Positron Emission Particle Imaging
+# PEPI: Positron Emission Projection Imaging
 
-PEPI is a Python module designed for the Positron Emission Particle Imaging (PEPI) technique where concentration field measurements are obtained from gamma ray data. It provides tools for voxelization, normalization, filtering, and visualization of 3D and 2D data.
+PEPI is a Python module designed for the Positron Emission Projection Imaging (PEPI) technique where concentration field measurements are obtained from gamma ray data. It provides tools for voxelization, normalization, filtering, and visualization of 3D and 2D data.
 
 <div align="center">
     <img src ="https://raw.githubusercontent.com/robh96/PEPI/main/images/cover_img.jpg" alt="graphical abstract of the PEPI method." width="800">
